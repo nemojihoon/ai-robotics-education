@@ -123,12 +123,15 @@ if __name__ == "__main__":
         box_dict = {}
 
         for i in range(len(boxes)):
-            cls_id = int(boxes.cls[i])
+            cls_id = int(boxes.cls[i].cpu().numpy())
+            conf = float(boxes.conf[i].cpu().numpy())
+            xywhr = boxes.xywhr[i].cpu().numpy()
+            xyxy = boxes.xyxy[i].cpu().numpy()
             if cls_id in box_dict:
-                if box_dict[cls_id]['conf'] < boxes.conf[i]:
-                    box_dict[cls_id] = {'conf': boxes.conf[i], 'xywhr': boxes.xywhr[i], 'xyxy': boxes.xyxy[i]}
+                if box_dict[cls_id]['conf'] < conf:
+                    box_dict[cls_id] = {'conf': conf, 'xywhr': xywhr, 'xyxy': xyxy}
             else:
-                box_dict[cls_id] = {'conf': boxes.conf[i], 'xywhr': boxes.xywhr[i], 'xyxy': boxes.xyxy[i]}
+                box_dict[cls_id] = {'conf': conf, 'xywhr': xywhr, 'xyxy': xyxy}
 
         # 사용자 입력
         print("감지된 클래스 목록:")
